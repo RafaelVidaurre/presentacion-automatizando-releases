@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Title</title>
-    <meta charset="utf-8">
-    <style>
+    <title>My Awesome Presentation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
       @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
       @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
       @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
-
       body { font-family: 'Droid Serif'; }
       h1, h2, h3 {
         font-family: 'Yanone Kaffeesatz';
@@ -36,9 +35,6 @@ class: center, middle
 
 ---
 
-# El problema: Parte 1
-
-## Proyecto ejemplo
 
 Somos los creadores de **MalaOndaBot**, un bot open-source que refleja su odio hacia la
 gente y el mundo.
@@ -49,9 +45,6 @@ del twitter del Benni
 
 ---
 
-# El problema: Parte 1
-
-## Proyecto ejemplo
 
 Nos fue bien, creamos **Flaitebot**, un bot open-source que es flaite
 
@@ -62,9 +55,6 @@ Nos fue bien, creamos **Flaitebot**, un bot open-source que es flaite
 
 ---
 
-# El problema: Parte 1
-
-## Proyecto ejemplo
 
 **Codigo repetido**
 
@@ -74,9 +64,6 @@ Nos fue bien, creamos **Flaitebot**, un bot open-source que es flaite
 
 ---
 
-# El problema: Parte 1
-
-## Proyecto ejemplo
 
 Estructura de archivos:
 
@@ -84,9 +71,6 @@ Estructura de archivos:
 
 ---
 
-# El problema: Parte 1
-
-## Proyecto ejemplo
 
 frases-generator
 
@@ -102,9 +86,6 @@ frases-generator
 
 ---
 
-# El problema: Parte 1
-
-## Proyecto ejemplo
 
 mala-onda-bot
 
@@ -125,9 +106,6 @@ mala-onda-bot
 
 ---
 
-# El problema: Parte 1
-
-## Proyecto ejemplo
 
 flaite-bot
 
@@ -145,9 +123,6 @@ flaite-bot
 
 ---
 
-# El problema: Parte 1
-
-## Proyecto ejemplo
 
 frases-generator
 
@@ -176,17 +151,13 @@ class: center, middle
 
 Todo en el mismo repositorio.
 
+.center[![estructura-de-archivos-1](https://imgur.com/download/PSz5AF2)]
 
 ---
 
-class: center, middle
+class: left, middle
 
 # Monorepo
-
-* Que hacemos con las dependencias repetidas?
-* Como evitamos seguir haciendo `yarn link`?
-* Como manejamos las versiones?
-* Como publicamos a `npm`?
 
 ```json
 {
@@ -199,12 +170,179 @@ class: center, middle
 
 ---
 
+# Monorepo: Problemas
+
+* Que hacemos con las dependencias repetidas?
+* Como evitamos seguir haciendo `yarn link`?
+* Como manejamos las versiones?
+* Como publicamos a `npm`?
+
+---
+
 # Yarn workspaces
 
 * Hoisting de dependencias comunes
 * Linking entre paquetes
-* Herramientas basicas desde el root del repositorio
-  
+
+---
+
+# Monorepo: Problemas
+
+* [X] Que hacemos con las dependencias repetidas?
+* [X] Como evitamos seguir haciendo `yarn link`?
+* [ ] Como manejamos las versiones?
+* [ ] Como publicamos a `npm`?
+
+
+---
+
+# Lerna
+Automatiza releases
+
+* Idealmente se usa en un CI
+* Automatiza bumping versiones
+* Actualiza las dependencias entre paquetes
+* CLI provee herramientas para manejo de repositorio
+* Hace symlinking si no se usa `yarn workspaces`
+
+
+---
+
+# Monorepo: Problemas
+
+* [X] Que hacemos con las dependencias repetidas?
+* [X] Como evitamos seguir haciendo `yarn link`?
+* [ ] Como manejamos las versiones? (...wait)
+* [X] Como publicamos a `npm`?
+
+---
+
+# Lerna: Manejo de versiones
+
+* **Modo: `fixed`:** Todas las versiones suben juntas ([babel por ejemplo](https://github.com/babel/babel))
+* **Modo: `independent`:** Las versiones suben se forma independiente
+**Como elige la versión?:**
+  * Método 1: Un humano decide (fome)
+  * Método 2: [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0-beta.2/)
+
+---
+
+class: center, middle
+
+# Conventional Commits
+
+Es una [convención para hacer commits](https://www.conventionalcommits.org/en/v1.0.0-beta.2/)
+
+## Usa Semver
+major.minor.patch
+
+- patch: Bugfixes
+- minor: Agrega funcionalidad, cambios son backwards-compatible
+- major: Breaking changes, cambia API publica / comportamiento de funcionalidad existente
+
+---
+
+## Como funciona:
+* Los commits entregan información sobre los cambios mediante keywords
+* Reglas de bump:
+  * Si el type es `fix`: patch bump (x.x.1)
+  * Si el type es `feat`: minor bump (x.1.0)
+  * Si el commit es un `BREAKING CHANGE`: major version bump (1.x.x)
+
+## Gratis: Changelogs!
+
+... Les muestro en el browser
+
+---
+
+# Monorepo: Problemas
+
+* [X] Que hacemos con las dependencias repetidas?
+* [X] Como evitamos seguir haciendo `yarn link`?
+* [X] Como manejamos las versiones? (...wait)
+* [X] Como publicamos a `npm`?
+
+---
+
+# Monorepo: Tips
+
+## Usar un namespace
+
+Ejemplo:
+- `@supermonorepo/mala-onda-bot`
+- `@supermonorepo/flaite-bot`
+- `@supermonorepo/frases-generator`
+
+Ayuda porque:
+* Permite encontrarlos mas facil con globs
+* Permite correr comandos mas facil: `lerna run --scope=@supermonorepo/{mala-onda-bot,flaite-bot} build`
+
+---
+
+# Monorepo: Tips
+
+## Babel Plugin: Module Resolver
+Si necesitamos transpilar, podemos evitar tener que hacer pre-builds antes 
+de correr una app o actualizar una dependencia
+
+Lo configuramos para traducir:
+`@foo/bar` => `@foo/bar/src` en los imports
+
+Asi evitamos importar al root donde aun no hay build
+
+[Link al plugin](https://github.com/tleunen/babel-plugin-module-resolver)
+
+---
+
+# Monorepo: Posibles problemas
+
+## Paquetes no compatibles con Node Module Resolution
+
+- Flow/Typescript se llevan pesimo con monorepos (pro-tip. Usen Typescript)
+- Algunos paquetes fallan, usar: [yarn nohoist](https://yarnpkg.com/blog/2018/02/15/nohoist/)
+
+## Un repo, muchas issues
+
+- Todas las issues en Github estaran bajo el mismo repo:
+  * Una opcion es usar un tag para cada paquete
+
+---
+
+## Git-flow? Mejor Github workflow para esto
+
+- Puede ser confuso hacer releases por branches con gitflow
+- Funciona mejor con [Github workflow](https://guides.github.com/introduction/flow/)
+
+## Un extra: Semantic Releases
+
+[Link](https://github.com/semantic-release/semantic-release)
+
+Aun no funciona bien con Lerna, pero... pronto?
+
+- Automatiza todo el proceso de releases
+- Genera changelogs
+- Actualiza Github
+- Publica paquete
+
+---
+
+class: center, middle
+
+# Fin
+
+Preguntas? Dudas?
+
+[@RafaelVidaurre](https://github.com/RafaelVidaurre) en github
+`@Narzerus` en Devs chile
+[rafael@vidaurre.io](mailto:rafael@vidaurre.io)
+
+Presentacion hecha a con [remarkjs](https://remarkjs.com/#1)
+
+---
+
+# Gracias
+
+.center[![bender](https://github.com/semantic-release/semantic-release/raw/caribou/media/bender.png)]
 
 
     </textarea>
