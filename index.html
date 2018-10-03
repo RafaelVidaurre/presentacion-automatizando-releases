@@ -26,15 +26,186 @@ class: center, middle
 
 ---
 
-# Agenda
+# Quien soy
 
-1. Introduction
-2. Deep-dive
-3. ...
+## Rafael Vidaurre
+
+- Full-stack developer
+- `@narzerus` en devsChile
+- Trabajo en [Polymath](https://polymath.network/) como Senior Full-stack Developer
 
 ---
 
-# Introduction
+# El problema: Parte 1
+
+## Proyecto ejemplo
+
+Somos los creadores de **MalaOndaBot**, un bot open-source que refleja su odio hacia la
+gente y el mundo.
+
+* Vive en su propio repo en Github
+* Posee un modulo `chuchadasGenerator.js`. Genera insultos aleatorios alimentandose
+del twitter del Benni
+
+---
+
+# El problema: Parte 1
+
+## Proyecto ejemplo
+
+Nos fue bien, creamos **Flaitebot**, un bot open-source que es flaite
+
+- Vive en su propio repo en Github
+- Posee un modulo `coaGenerator.js`.
+- Genera frases 100% aleatorias basadas en el twitter del Cizarro
+
+
+---
+
+# El problema: Parte 1
+
+## Proyecto ejemplo
+
+**Codigo repetido**
+
+- Creamos paquete npm `frases-generator`
+- Aprende de una cuenta de twitter especifica
+- Genera frases aleatorias
+
+---
+
+# El problema: Parte 1
+
+## Proyecto ejemplo
+
+Estructura de archivos:
+
+.center[![estructura-de-archivos-1](https://imgur.com/download/PSz5AF2)]
+
+---
+
+# El problema: Parte 1
+
+## Proyecto ejemplo
+
+frases-generator
+
+```json
+{
+  "name": "frases-generator",
+  "version": "1.2.3",
+  "main": "index.js",
+  "license": "MIT"
+}
+
+```
+
+---
+
+# El problema: Parte 1
+
+## Proyecto ejemplo
+
+mala-onda-bot
+
+
+```json
+{
+  "name": "mala-onda-bot",
+  "version": "1.0.0",
+  "description": "Bot super mal educado",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "frases-generator": "1.2.3"
+  }
+}
+```json
+
+
+---
+
+# El problema: Parte 1
+
+## Proyecto ejemplo
+
+flaite-bot
+
+```json
+{
+  "name": "flaite-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "frases-generator": "1.2.3"
+  }
+}
+```
+
+---
+
+# El problema: Parte 1
+
+## Proyecto ejemplo
+
+frases-generator
+
+```json
+{
+  "name": "frases-generator",
+  "version": "1.2.3",
+  "main": "index.js",
+  "license": "MIT"
+}
+
+```
+
+---
+
+En un entorno de desarrollo, que hacemos?
+
+* `version bump` + `npm publish` + `npm install`
+* `yarn link` ( o `npm link`)
+
+---
+
+class: center, middle
+
+# Monorepo
+
+Todo en el mismo repositorio.
+
+
+---
+
+class: center, middle
+
+# Monorepo
+
+* Que hacemos con las dependencias repetidas?
+* Como evitamos seguir haciendo `yarn link`?
+* Como manejamos las versiones?
+* Como publicamos a `npm`?
+
+```json
+{
+  "name": "monorepo-bacan",
+  "devDependencies": {
+    ...
+  }
+}
+```
+
+---
+
+# Yarn workspaces
+
+* Hoisting de dependencias comunes
+* Linking entre paquetes
+* Herramientas basicas desde el root del repositorio
+  
+
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">

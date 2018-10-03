@@ -1,7 +1,6 @@
 {
-  "name": "mala-onda-bot",
+  "name": "flaite-bot",
   "version": "1.0.0",
-  "description": "Bot super mal educado",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
